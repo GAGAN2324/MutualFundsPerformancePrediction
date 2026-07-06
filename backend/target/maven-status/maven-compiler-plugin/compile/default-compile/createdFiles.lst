@@ -1,0 +1,12 @@
+com\gagan\mutualfunds\service\TimeSeriesModelService$ForecastResult.class
+com\gagan\mutualfunds\util\Metrics.class
+com\gagan\mutualfunds\service\TimeSeriesModelService.class
+com\gagan\mutualfunds\controller\FundController.class
+com\gagan\mutualfunds\util\CsvReader.class
+com\gagan\mutualfunds\config\GlobalCORSConfig$1.class
+com\gagan\mutualfunds\config\GlobalCORSConfig.class
+com\gagan\mutualfunds\service\SIPService.class
+com\gagan\mutualfunds\MutualFundsBackendApplication.class
+com\gagan\mutualfunds\service\LinearRegressionService.class
+com\gagan\mutualfunds\service\RandomForestService.class
+com\gagan\mutualfunds\service\ARIMAService.class
