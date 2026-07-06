@@ -60,7 +60,14 @@ Runs on `http://localhost:5173`.
 
 ## Screenshots
 
-*(add screenshots of the dashboard here)*
+<img width="1911" height="957" alt="image" src="https://github.com/user-attachments/assets/8065ab1a-22cf-428c-a708-0039e3c24e17" />
+<img width="1382" height="762" alt="image" src="https://github.com/user-attachments/assets/d31a6f3f-af47-44ef-b0e9-300e854726ff" />
+<img width="1897" height="960" alt="image" src="https://github.com/user-attachments/assets/c044ec48-e9d6-4de4-98fb-6e39dede0751" />
+<img width="1475" height="462" alt="image" src="https://github.com/user-attachments/assets/a9989eb5-614f-42a9-b8b7-176f4886ca30" />
+
+
+
+
 
 ## Future Improvements
 
