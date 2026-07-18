@@ -77,7 +77,7 @@ export default function App() {
 
   const dates = predictionData?.predictionDates || [];
   const predicted = predictionData?.prediction || [];
-  const actual = eda?.navValues || [];
+  const actual = eda?.history || [];
   const modelData = predictionData?.modelComparison || [];
 
   const nextNAV =
@@ -239,7 +239,7 @@ export default function App() {
               selectedFund={{
                 name: fund,
                 history: actual,
-                dates: eda?.dates || [],
+                dates: dates,
               }}
               monthlySIP={2000}
             />
@@ -258,7 +258,7 @@ export default function App() {
             />
 
             <AlgorithmTable
-              algorithms={eda?.algorithms || []}
+              algorithms={predictionData.algorithms || []}
             />
 
             <div className="premium-card" style={{ marginTop: 30 }}>
