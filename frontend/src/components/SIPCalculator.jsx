@@ -11,25 +11,38 @@ export default function SIPCalculator({
         selectedFund?.name ||
         selectedFund?.fundName ||
         selectedFund?.model ||
-        selectedFund?.fund ||
         "No fund selected";
 
-    // ---------------- EXPECTED RETURN FROM PREDICTION ----------------
+    const computeAnnualReturnFromHistory = (history = [], dates = []) => {
+        if (!history || history.length < 2) return 0;
+
+        const first = Number(history[0]);
+        const last = Number(history[history.length - 1]);
+        if (!isFinite(first) || first <= 0) return 0;
+
+        let years = null;
+        try {
+            if (dates.length >= 2) {
+                const start = new Date(dates[0]);
+                const end = new Date(dates[dates.length - 1]);
+                years = (end - start) / (1000 * 60 * 60 * 24 * 365.25);
+            }
+        } catch (err) {
+            years = null;
+        }
+
+        if (!years || years <= 0) years = history.length / 12;
+
+        return Math.pow(last / first, 1 / years) - 1;
+    };
+
     const expectedAnnualReturn = useMemo(() => {
         if (!selectedFund) return 0;
 
-        const pred = selectedFund.prediction || [];
-        if (pred.length < 2) return 0;
+        const hist = selectedFund.history || selectedFund.navValues || [];
+        const dates = selectedFund.dates || [];
 
-        const first = Number(pred[0]);
-        const last = Number(pred[pred.length - 1]);
-        if (!isFinite(first) || first <= 0) return 0;
-
-        const months = pred.length - 1;
-        const years = months / 12;
-        if (years <= 0) return 0;
-
-        const derived = Math.pow(last / first, 1 / years) - 1;
+        const derived = computeAnnualReturnFromHistory(hist, dates);
         return isFinite(derived) ? derived : 0;
     }, [selectedFund]);
 
@@ -148,7 +161,7 @@ export default function SIPCalculator({
             ))}
 
             <div style={{ marginTop: 10, color: "#8fdcff", fontSize: 13 }}>
-                Note: Estimated based on selected fund's 6-month predicted NAV trend.
+                Note: Estimated based on selected fund's historical CAGR.
             </div>
         </div>
     );
