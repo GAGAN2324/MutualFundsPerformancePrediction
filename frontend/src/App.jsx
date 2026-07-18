@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "./services/api";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
@@ -25,17 +25,19 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/fund/amc-list")
-      .then((res) => setAmcList(res.data || []));
+    api
+      .get("/amc-list")
+      .then((res) => setAmcList(res.data || []))
+      .catch((err) => console.error(err));
   }, []);
 
   useEffect(() => {
     if (!selectedAMC) return;
 
-    axios
-      .get(`http://localhost:8080/api/fund/fund-list?name=${selectedAMC}`)
-      .then((res) => setFundList(res.data || []));
+    api
+      .get(`/fund-list?name=${selectedAMC}`)
+      .then((res) => setFundList(res.data || []))
+      .catch((err) => console.error(err));
   }, [selectedAMC]);
 
   async function loadEDA() {
@@ -44,10 +46,7 @@ export default function App() {
     setLoading(true);
 
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/fund/by-fund?fund=${fund}`
-      );
-
+      const res = await api.get(`/by-fund?fund=${fund}`);
       setEda(res.data || {});
       setPredictionData(null);
     } catch (error) {
@@ -63,10 +62,7 @@ export default function App() {
     setLoading(true);
 
     try {
-      const res = await axios.get(
-        `http://localhost:8080/api/fund/predict?fund=${fund}`
-      );
-
+      const res = await api.get(`/predict?fund=${fund}`);
       setPredictionData(res.data || {});
     } catch (error) {
       console.error(error);
@@ -83,19 +79,20 @@ export default function App() {
   const nextNAV =
     predicted.length > 0 ? predicted[predicted.length - 1] : 0;
 
-  // ---------------- PROFESSIONAL PDF GENERATOR ----------------
-
   const handleDownloadPDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");
 
-    // -------- COVER PAGE --------
     pdf.setFontSize(26);
     pdf.setTextColor(0, 102, 204);
-    pdf.text("Mutual Fund Performance Report", 105, 50, { align: "center" });
+    pdf.text("Mutual Fund Performance Report", 105, 50, {
+      align: "center",
+    });
 
     pdf.setFontSize(14);
     pdf.setTextColor(0, 0, 0);
-    pdf.text(`Fund: ${fund}`, 105, 70, { align: "center" });
+    pdf.text(`Fund: ${fund}`, 105, 70, {
+      align: "center",
+    });
 
     pdf.text(
       `Generated on: ${new Date().toLocaleString()}`,
@@ -104,7 +101,6 @@ export default function App() {
       { align: "center" }
     );
 
-    // Logo
     const logoImg = new Image();
     logoImg.src = LOGO;
 
@@ -115,14 +111,12 @@ export default function App() {
       };
     });
 
-    // Watermark
     pdf.setTextColor(220, 220, 220);
     pdf.setFontSize(50);
     pdf.text("CONFIDENTIAL", 35, 180, { angle: 45 });
 
     pdf.addPage();
 
-    // -------- DASHBOARD CONTENT --------
     const input = document.getElementById("reportContent");
 
     const canvas = await html2canvas(input, {
@@ -149,19 +143,15 @@ export default function App() {
       heightLeft -= pageHeight;
     }
 
-    // -------- PAGE NUMBERS --------
     const totalPages = pdf.internal.getNumberOfPages();
 
     for (let i = 1; i <= totalPages; i++) {
       pdf.setPage(i);
       pdf.setFontSize(10);
       pdf.setTextColor(100);
-      pdf.text(
-        `Page ${i} of ${totalPages}`,
-        105,
-        290,
-        { align: "center" }
-      );
+      pdf.text(`Page ${i} of ${totalPages}`, 105, 290, {
+        align: "center",
+      });
     }
 
     pdf.save(`${fund}_Professional_Report.pdf`);
@@ -170,7 +160,6 @@ export default function App() {
   return (
     <div className="page">
       <div className="container" id="reportContent">
-
         <div className="banner-wrap">
           <img src={LOGO} className="banner-img" alt="logo" />
         </div>
@@ -180,6 +169,7 @@ export default function App() {
         </h1>
 
         <h3>Select AMC</h3>
+
         <AMCSelector
           selectedAMC={selectedAMC}
           onSelect={setSelectedAMC}
@@ -261,8 +251,11 @@ export default function App() {
               algorithms={predictionData.algorithms || []}
             />
 
-            <div className="premium-card" style={{ marginTop: 30 }}>
-              <h2>📄 Download  Report</h2>
+            <div
+              className="premium-card"
+              style={{ marginTop: 30 }}
+            >
+              <h2>📄 Download Report</h2>
 
               <button
                 className="btn primary"
@@ -277,7 +270,6 @@ export default function App() {
                 Download Full Professional PDF
               </button>
             </div>
-
           </>
         )}
       </div>
