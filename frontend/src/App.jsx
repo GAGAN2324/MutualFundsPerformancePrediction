@@ -71,9 +71,12 @@ export default function App() {
     setLoading(false);
   }
 
+  // FIX: eda's historical NAV array is "navValues", not "history".
+  // Fallback to "history" kept in case backend shape changes back.
   const dates = predictionData?.predictionDates || [];
   const predicted = predictionData?.prediction || [];
-  const actual = eda?.history || [];
+  const actual = eda?.navValues || eda?.history || [];
+  const historyDates = eda?.dates || [];
   const modelData = predictionData?.modelComparison || [];
 
   const nextNAV =
@@ -229,7 +232,7 @@ export default function App() {
               selectedFund={{
                 name: fund,
                 history: actual,
-                dates: dates,
+                dates: historyDates,
               }}
               monthlySIP={2000}
             />
