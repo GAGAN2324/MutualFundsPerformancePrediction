@@ -42,7 +42,9 @@ export default function SIPCalculator({
     const expectedAnnualReturn = useMemo(() => {
         if (!selectedFund) return 0;
 
-        const hist = selectedFund.history || [];
+        // FIX: backend/App.jsx now uses "navValues" instead of "history".
+        // Fallback to "history" kept in case an older data shape is passed in.
+        const hist = selectedFund.navValues || selectedFund.history || [];
         const dates = selectedFund.dates || [];
 
         const derived = computeAnnualReturnFromHistory(hist, dates);
