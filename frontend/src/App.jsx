@@ -247,10 +247,9 @@ export default function App() {
               modelData={modelData}
             />
 
-            <AlgorithmTable
-              algorithms={predictionData.algorithms || []}
-            />
-
+           <AlgorithmTable
+               algorithms={eda?.algorithms || []}
+           />
             <div
               className="premium-card"
               style={{ marginTop: 30 }}
