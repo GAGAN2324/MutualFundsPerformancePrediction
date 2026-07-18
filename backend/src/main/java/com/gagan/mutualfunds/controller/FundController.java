@@ -10,7 +10,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/fund")
-@CrossOrigin(origins = "*")
+
 public class FundController {
 
     @Autowired
