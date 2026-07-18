@@ -13,11 +13,16 @@ public class GlobalCORSConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
+
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedOrigins(
+                                "http://localhost:5173",
+                                "https://victorious-manifestation-production.up.railway.app"
+                        )
+                        .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);
+
             }
         };
     }
