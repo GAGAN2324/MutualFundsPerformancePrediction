@@ -10,6 +10,7 @@ import AlgorithmTable from "./components/AlgorithmTable";
 import SIPCalculator from "./components/SIPCalculator";
 import ChartSection from "./components/ChartSection";
 import PieCharts from "./components/PieCharts";
+import AIChat from "./components/AIChat";
 
 import LOGO from "./assets/fund.png";
 import "./styles.css";
@@ -23,6 +24,9 @@ export default function App() {
   const [eda, setEda] = useState(null);
   const [predictionData, setPredictionData] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // AI Chatbot visibility
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     api
@@ -81,6 +85,38 @@ export default function App() {
 
   const nextNAV =
     predicted.length > 0 ? predicted[predicted.length - 1] : 0;
+
+  // ---- Data normalization for AIChat ----
+  // AIChat expects:
+  //   data.history  -> array of { nav } objects
+  //   data.algorithms -> object keyed by model name, e.g. { arima: { mape: ... } }
+  //   data.predicted -> array of numbers
+  //   data.modelComparison -> array
+  //
+  // Our app currently produces:
+  //   actual -> array of plain numbers (NAV values)
+  //   eda.algorithms -> array of { name/model, mape, ... }
+  //
+  // Normalize here rather than assuming the backend shape will change.
+  const algorithmsObj = (eda?.algorithms || []).reduce((acc, algo) => {
+    const key = (algo?.name || algo?.model || "").toString().toLowerCase();
+    if (key) acc[key] = algo;
+    return acc;
+  }, {});
+
+  const chatHistory = actual.map((v) =>
+    typeof v === "object" && v !== null ? v : { nav: v }
+  );
+
+  const chatData =
+    predictionData && eda
+      ? {
+          predicted,
+          history: chatHistory,
+          algorithms: algorithmsObj,
+          modelComparison: modelData,
+        }
+      : null;
 
   const handleDownloadPDF = async () => {
     const pdf = new jsPDF("p", "mm", "a4");
@@ -275,6 +311,25 @@ export default function App() {
           </>
         )}
       </div>
+
+      {/* AI Chatbot lives OUTSIDE #reportContent so it never gets
+          captured into the PDF by html2canvas */}
+      {predictionData && (
+        <>
+          <button
+            className="chatbot-fab"
+            onClick={() => setShowChat(true)}
+            aria-label="Open AI Fund Assistant"
+            title="Ask the AI Fund Assistant"
+          >
+            🤖
+          </button>
+
+          {showChat && (
+            <AIChat data={chatData} onClose={() => setShowChat(false)} />
+          )}
+        </>
+      )}
     </div>
   );
 }
