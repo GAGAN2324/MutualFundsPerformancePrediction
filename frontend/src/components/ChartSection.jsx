@@ -27,9 +27,9 @@ export default function ChartSection({ actual = [], predicted = [], dates = [], 
   const safeModelData = modelData.length > 0
     ? modelData
     : [
-        { date: "Jan", ARIMA: 102, LINEAR: 101, RF: 103 },
-        { date: "Feb", ARIMA: 107, LINEAR: 106, RF: 108 },
-        { date: "Mar", ARIMA: 112, LINEAR: 110, RF: 113 },
+        { date: "Jan", DRIFT: 102, LINEAR: 101, RF: 103 },
+        { date: "Feb", DRIFT: 107, LINEAR: 106, RF: 108 },
+        { date: "Mar", DRIFT: 112, LINEAR: 110, RF: 113 },
       ];
 
   return (
@@ -61,7 +61,7 @@ export default function ChartSection({ actual = [], predicted = [], dates = [], 
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="ARIMA" stroke="#00eaff" strokeWidth={3} />
+           <Line type="monotone" dataKey="DRIFT" stroke="#00eaff" strokeWidth={3} />
             <Line type="monotone" dataKey="LINEAR" stroke="#ffc846" strokeWidth={3} />
             <Line type="monotone" dataKey="RF" stroke="#48ff5a" strokeWidth={3} />
           </LineChart>
