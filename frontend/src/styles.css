@@ -2944,3 +2944,23 @@ body {
     font-size: 19px;
     color: #9ec7ff;
 }
+#reportContent{
+    background:#fff;
+}
+
+#reportContent>*{
+    break-inside:avoid;
+    page-break-inside:avoid;
+}
+
+.chart-card{
+    break-inside:avoid;
+}
+
+table{
+    break-inside:avoid;
+}
+
+canvas{
+    max-width:100%;
+}
