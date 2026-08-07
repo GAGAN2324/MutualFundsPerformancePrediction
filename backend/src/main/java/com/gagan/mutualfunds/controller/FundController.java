@@ -89,9 +89,9 @@ public class FundController {
 
         List<Map<String, Object>> algorithms = new ArrayList<>();
 
-        algorithms.add(evaluateLinear(train, test));
-        algorithms.add(evaluateMovingAverage(train, test));
-        algorithms.add(evaluateMomentum(train, test));
+        algorithms.add(evaluateLinear(train, test, mean));
+        algorithms.add(evaluateMovingAverage(train, test, mean));
+        algorithms.add(evaluateMomentum(train, test, mean));
 
         // Sort by accuracy (descending)
         algorithms.sort((a, b) ->
@@ -118,7 +118,8 @@ public class FundController {
     // ================= LINEAR REGRESSION =================
     private Map<String, Object> evaluateLinear(
             List<Double> train,
-            List<Double> test) {
+            List<Double> test,
+            double mean) {
 
         int n = train.size();
         double sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
@@ -137,28 +138,30 @@ public class FundController {
         double intercept = (sumY - slope * sumX) / n;
 
         return calculateAccuracy("LINEAR",
-                train, test,
+                train, test, mean,
                 (i) -> slope * i + intercept);
     }
 
     // ================= MOVING AVERAGE =================
     private Map<String, Object> evaluateMovingAverage(
             List<Double> train,
-            List<Double> test) {
+            List<Double> test,
+            double mean) {
 
         double avg = train.stream()
                 .mapToDouble(Double::doubleValue)
                 .average().orElse(0);
 
         return calculateAccuracy("ARIMA",
-                train, test,
+                train, test, mean,
                 (i) -> avg);
     }
 
     // ================= MOMENTUM MODEL =================
     private Map<String, Object> evaluateMomentum(
             List<Double> train,
-            List<Double> test) {
+            List<Double> test,
+            double mean) {
 
         double lastDiff =
                 train.get(train.size()-1)
@@ -167,7 +170,7 @@ public class FundController {
         double last = train.get(train.size()-1);
 
         return calculateAccuracy("RF",
-                train, test,
+                train, test, mean,
                 (i) -> last + lastDiff * i);
     }
 
@@ -176,6 +179,7 @@ public class FundController {
             String model,
             List<Double> train,
             List<Double> test,
+            double mean,
             java.util.function.Function<Integer, Double> predictor) {
 
         double totalError = 0;
@@ -201,6 +205,7 @@ public class FundController {
         Map<String, Object> map = new HashMap<>();
         map.put("model", model);
         map.put("predicted", round(predictor.apply(train.size())));
+        map.put("mean", round(mean));
         map.put("accuracy", round(accuracy));
         map.put("rating", rating);
 
