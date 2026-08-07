@@ -15,8 +15,7 @@ import java.util.List;
  * Produces genuinely distinct multi-step NAV forecasts for three models:
  *  - LINEAR : Weka LinearRegression trained on (timeIndex -> NAV)
  *  - RF     : Weka RandomForest trained on (timeIndex -> NAV)
- *  - ARIMA  : lightweight drift-based approximation (last value + trend),
- *             since Weka has no native ARIMA implementation.
+ *  - DRIFT  : lightweight drift-based approximation (last value + trend).
  *
  * All three are trained on the same historical NAV series and used to
  * forecast `horizon` future steps (e.g. months) ahead.
@@ -27,7 +26,7 @@ public class TimeSeriesModelService {
     public static class ForecastResult {
         public double[] linear;
         public double[] rf;
-        public double[] arima;
+        public double[] drift;
     }
 
     public ForecastResult forecast(List<Double> series, int horizon) throws Exception {
@@ -45,10 +44,10 @@ public class TimeSeriesModelService {
 
         double[] linearOut = new double[horizon];
         double[] rfOut = new double[horizon];
-        double[] arimaOut = new double[horizon];
+        double[] driftOut = new double[horizon];
 
-        // ARIMA-style drift: average of last few period-over-period changes
-        double drift = computeDrift(series);
+        // Drift-based forecast: average of last few period-over-period changes
+        double driftStep = computeDrift(series);
         double lastValue = series.get(n - 1);
 
         for (int step = 0; step < horizon; step++) {
@@ -62,13 +61,13 @@ public class TimeSeriesModelService {
             linearOut[step] = lr.classifyInstance(inst);
             rfOut[step] = rf.classifyInstance(inst);
 
-            lastValue = lastValue + drift;
-            arimaOut[step] = lastValue;
+            lastValue = lastValue + driftStep;
+            driftOut[step] = lastValue;
         }
 
         result.linear = linearOut;
         result.rf = rfOut;
-        result.arima = arimaOut;
+        result.drift = driftOut;
         return result;
     }
 
@@ -88,7 +87,7 @@ public class TimeSeriesModelService {
         return dataset;
     }
 
-    /** Average of the last N period-over-period changes, used as ARIMA drift term. */
+    /** Average of the last N period-over-period changes, used as the drift term. */
     private double computeDrift(List<Double> series) {
         int window = Math.min(6, series.size() - 1);
         if (window <= 0) return 0.0;
