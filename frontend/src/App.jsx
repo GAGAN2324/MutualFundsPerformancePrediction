@@ -89,7 +89,7 @@ export default function App() {
   // ---- Data normalization for AIChat ----
   // AIChat expects:
   //   data.history  -> array of { nav } objects
-  //   data.algorithms -> object keyed by model name, e.g. { arima: { mape: ... } }
+  //   data.algorithms -> object keyed by model name, e.g. { drift: { mape: ... } }
   //   data.predicted -> array of numbers
   //   data.modelComparison -> array
   //
