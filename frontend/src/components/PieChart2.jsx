@@ -16,14 +16,14 @@ export default function PieChart2({ algorithms, history }) {
         Number(history[history.length - 1].nav || history[history.length - 1]);
 
     // Latest predicted NAVs
-    const lastArima = algorithms.arima.predicted.slice(-1)[0];
+   const lastDrift = algorithms.drift.predicted.slice(-1)[0];
     const lastLinear = algorithms.linear.predicted.slice(-1)[0];
     const lastRF = algorithms.rf.predicted.slice(-1)[0];
 
     // Chart Data
     const data = [
         { name: "Actual NAV", value: lastActual },
-        { name: "ARIMA Prediction", value: lastArima },
+       { name: "DRIFT Prediction", value: lastDrift },
         { name: "Linear Prediction", value: lastLinear },
         { name: "Random Forest Prediction", value: lastRF }
     ];
