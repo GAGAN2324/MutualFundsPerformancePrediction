@@ -30,7 +30,16 @@ export default function SIP() {
       )}
 
       {fund && eda && (
-        <div id="reportContent">
+      <div
+  id="reportContent"
+  style={{
+    width: "794px",
+    background: "#ffffff",
+    margin: "0 auto",
+    padding: "25px",
+    boxSizing: "border-box"
+  }}
+>
           <SIPCalculator selectedFund={selectedFund} />
 
           <div className="premium-card" style={{ marginTop: 24 }}>
