@@ -7,15 +7,15 @@ import {
 export default function LineChart2({ algorithms, predictionDates }) {
     if (!algorithms) return null;
 
-    const models = ["arima", "linear", "rf"];
-    const length = algorithms["arima"].predicted.length;
+   const models = ["drift", "linear", "rf"];
+const length = algorithms["drift"].predicted.length;
 
-    const data = Array.from({ length }).map((_, i) => ({
-        date: predictionDates?.[i] || `P${i + 1}`,
-        ARIMA: algorithms["arima"].predicted[i],
-        LINEAR: algorithms["linear"].predicted[i],
-        RF: algorithms["rf"].predicted[i]
-    }));
+const data = Array.from({ length }).map((_, i) => ({
+    date: predictionDates?.[i] || `P${i + 1}`,
+    DRIFT: algorithms["drift"].predicted[i],
+    LINEAR: algorithms["linear"].predicted[i],
+    RF: algorithms["rf"].predicted[i]
+}));
 
     return (
         <div className="card section-card">
@@ -39,7 +39,7 @@ export default function LineChart2({ algorithms, predictionDates }) {
                     />
                     <Legend wrapperStyle={{ color: "#9bdfff" }} />
 
-                    <Line type="monotone" dataKey="ARIMA" stroke="#4cc9f0" strokeWidth={3} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="DRIFT" stroke="#4cc9f0" strokeWidth={3} activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="LINEAR" stroke="#ffd166" strokeWidth={3} activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="RF" stroke="#00ff99" strokeWidth={3} activeDot={{ r: 8 }} />
                 </LineChart>
