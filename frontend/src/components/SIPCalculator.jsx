@@ -36,16 +36,28 @@ export default function SIPCalculator({
         return Math.pow(last / first, 1 / years) - 1;
     };
 
-    const expectedAnnualReturn = useMemo(() => {
-        if (!selectedFund) return 0;
+   const expectedAnnualReturn = useMemo(() => {
+    if (!selectedFund) return 0;
 
-        const hist = selectedFund.history || selectedFund.navValues || [];
-        const dates = selectedFund.dates || [];
+    const prediction = selectedFund.prediction || [];
 
-        const derived = computeAnnualReturnFromHistory(hist, dates);
-        return isFinite(derived) ? derived : 0;
-    }, [selectedFund]);
+    if (prediction.length >= 2) {
+        const first = Number(prediction[0]);
+        const last = Number(prediction[prediction.length - 1]);
 
+        if (first > 0 && last > 0) {
+            const years = prediction.length / 12;
+            return Math.pow(last / first, 1 / years) - 1;
+        }
+    }
+
+    const hist = selectedFund.history || [];
+    const dates = selectedFund.dates || [];
+
+    return computeAnnualReturnFromHistory(hist, dates);
+}, [selectedFund]);
+
+    
     const calcSIP = (monthly, years, annualRate) => {
         const r = annualRate / 12;
         const n = years * 12;
