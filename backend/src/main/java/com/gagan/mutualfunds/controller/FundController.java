@@ -142,7 +142,7 @@ public class FundController {
                 (i) -> slope * i + intercept);
     }
 
-    // ================= MOVING AVERAGE =================
+    // ================= MOVING AVERAGE (DRIFT BASELINE) =================
     private Map<String, Object> evaluateMovingAverage(
             List<Double> train,
             List<Double> test,
@@ -152,7 +152,7 @@ public class FundController {
                 .mapToDouble(Double::doubleValue)
                 .average().orElse(0);
 
-        return calculateAccuracy("ARIMA",
+        return calculateAccuracy("DRIFT",
                 train, test, mean,
                 (i) -> avg);
     }
@@ -252,13 +252,13 @@ public class FundController {
             for (int i = 0; i < futureDates.size(); i++) {
                 Map<String, Object> point = new LinkedHashMap<>();
                 point.put("date", futureDates.get(i));
-                point.put("ARIMA", round(forecast.arima[i]));
+                point.put("DRIFT", round(forecast.drift[i]));
                 point.put("LINEAR", round(forecast.linear[i]));
                 point.put("RF", round(forecast.rf[i]));
                 modelComparison.add(point);
 
                 // primary headline prediction: average of the three models
-                double avg = (forecast.arima[i] + forecast.linear[i] + forecast.rf[i]) / 3.0;
+                double avg = (forecast.drift[i] + forecast.linear[i] + forecast.rf[i]) / 3.0;
                 predictions.add(round(avg));
             }
         } catch (Exception e) {
