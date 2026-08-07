@@ -12,12 +12,12 @@ export default function PieCharts({ actual = [], predicted = [], modelData = [] 
 
   const comparisonData = modelData.length > 0
     ? [
-        { name: "ARIMA", value: modelData[modelData.length - 1].ARIMA },
+      { name: "DRIFT", value: modelData[modelData.length - 1].DRIFT },
         { name: "LINEAR", value: modelData[modelData.length - 1].LINEAR },
         { name: "RF", value: modelData[modelData.length - 1].RF },
       ]
     : [
-        { name: "ARIMA", value: 120 },
+        { name: "DRIFT", value: 120 },
         { name: "LINEAR", value: 115 },
         { name: "RF", value: 118 },
       ];
