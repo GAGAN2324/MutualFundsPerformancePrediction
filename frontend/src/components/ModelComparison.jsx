@@ -32,7 +32,7 @@ export default function ModelComparison({ modelData }) {
                     <Tooltip />
                     <Legend />
 
-                    <Line type="monotone" dataKey="ARIMA" stroke="#00eaff" strokeWidth={3} />
+               <Line type="monotone" dataKey="DRIFT" stroke="#00eaff" strokeWidth={3} />
                     <Line type="monotone" dataKey="LINEAR" stroke="#ffc846" strokeWidth={3} />
                     <Line type="monotone" dataKey="RF" stroke="#48ff5a" strokeWidth={3} />
                 </LineChart>
