@@ -1,7 +1,9 @@
 import React from "react";
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import ChartSection from "../components/ChartSection";
 import PieCharts from "../components/PieCharts";
+import AlgorithmTable from "../components/AlgorithmTable";
+import AccuracyLeaderboard from "../components/AccuracyLeaderboard";
 
 export default function Prediction() {
   const {
@@ -10,7 +12,6 @@ export default function Prediction() {
     predictionData,
     loading,
     handlePredict,
-    handleDownloadPDF,
     nextNAV,
     dates,
     predicted,
@@ -27,19 +28,29 @@ export default function Prediction() {
 
   return (
     <div>
-      <h1 className="page-title">NAV Forecast</h1>
+      <h1 className="page-title">Prediction & Model Accuracy</h1>
       <p className="page-subtitle">
         {fund ? `Fund: ${fund}` : "Select a fund on the Dashboard first."}
       </p>
 
       {!eda && (
         <div className="empty-prompt">
-          Load a fund's EDA on the Dashboard before running a prediction.
+          Load a fund's EDA on the Analytics page before running a prediction.
         </div>
       )}
 
+      {eda && algorithms.length > 0 && (
+        <>
+          <AlgorithmTable algorithms={algorithms} />
+          <div style={{ marginTop: 16 }}>
+            <AccuracyLeaderboard algorithms={algorithms} />
+          </div>
+        </>
+      )}
+
       {eda && !predictionData && (
-        <div className="card" style={{ textAlign: "center" }}>
+        <div className="card" style={{ textAlign: "center", marginTop: 24 }}>
+          <h3 style={{ marginTop: 0 }}>NAV Forecast</h3>
           <button className="btn primary" onClick={handlePredict} style={{ marginTop: 10 }}>
             Predict Performance
           </button>
@@ -48,7 +59,11 @@ export default function Prediction() {
       )}
 
       {predictionData && (
-        <div id="reportContent">
+        <div style={{ marginTop: 30 }}>
+          <h3 className="section-heading" style={{ marginTop: 0 }}>
+            NAV Forecast
+          </h3>
+
           <div className="summary-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
             <div className="summary-card">
               <div className="stat-key">Predicted NAV</div>
@@ -76,17 +91,14 @@ export default function Prediction() {
           </div>
 
           <PieCharts actual={actual} predicted={predicted} modelData={modelData} />
+        </div>
+      )}
 
-          <div className="premium-card" style={{ marginTop: 30 }}>
-            <h2>📄 Download Report</h2>
-            <button
-              className="btn primary"
-              onClick={handleDownloadPDF}
-              style={{ marginTop: 20, padding: "12px 20px", fontSize: 16, borderRadius: 8 }}
-            >
-              Download Full Professional PDF
-            </button>
-          </div>
+      {eda && algorithms.length > 0 && (
+        <div className="flow-continue">
+          <Link to="/model-comparison" className="btn primary">
+            Continue to Model Comparison →
+          </Link>
         </div>
       )}
     </div>

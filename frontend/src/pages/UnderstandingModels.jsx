@@ -30,6 +30,19 @@ export default function UnderstandingModels() {
       <h1 className="page-title">How the Forecasting Models Work</h1>
       <p className="page-subtitle">Three approaches — from a simple baseline to ensemble learning.</p>
 
+      <div className="card">
+        <h3 style={{ marginTop: 0 }}>What is an AMC?</h3>
+        <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6 }}>
+          An AMC (Asset Management Company) is the firm that pools money from
+          investors and manages it in the form of mutual funds — for example
+          HDFC, SBI, or ICICI Prudential. Each AMC runs several funds, and
+          each fund tracks its own Net Asset Value (NAV), the per-unit price
+          used throughout this app. Selecting an AMC on the Dashboard narrows
+          the fund list down to that AMC's own funds.
+        </p>
+      </div>
+
+      <h3 className="section-heading">Forecasting Models</h3>
       <div className="model-info-grid">
         {MODELS.map((m) => (
           <div key={m.name} className="model-info-card">

@@ -12,6 +12,7 @@ import Prediction from "./pages/Prediction";
 import Analytics from "./pages/Analytics";
 import ModelComparisonPage from "./pages/ModelComparisonPage";
 import UnderstandingModels from "./pages/UnderstandingModels";
+import SIP from "./pages/SIP";
 import About from "./pages/About";
 
 import LOGO from "./assets/fund.png";
@@ -257,9 +258,10 @@ export default function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="/prediction" element={<Prediction />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/prediction" element={<Prediction />} />
           <Route path="/model-comparison" element={<ModelComparisonPage />} />
+          <Route path="/sip-calculator" element={<SIP />} />
           <Route path="/understanding-models" element={<UnderstandingModels />} />
           <Route path="/about" element={<About />} />
         </Route>

@@ -1,9 +1,18 @@
-import React from "react";
-import { useOutletContext } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useOutletContext } from "react-router-dom";
 import EDASection from "../components/EDASection";
 
 export default function Analytics() {
-  const { fund, eda } = useOutletContext();
+  const { fund, eda, loading, loadEDA } = useOutletContext();
+
+  // Auto-load the moment a fund is selected and we don't already have
+  // EDA data for it — used to require clicking a button on Dashboard.
+  useEffect(() => {
+    if (fund && !eda && !loading) {
+      loadEDA();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fund]);
 
   return (
     <div>
@@ -12,11 +21,32 @@ export default function Analytics() {
         {fund ? `Fund: ${fund}` : "Select a fund on the Dashboard first."}
       </p>
 
-      {eda ? (
-        <EDASection eda={eda} />
-      ) : (
+      {!fund && (
         <div className="empty-prompt">
-          Load a fund's EDA on the Dashboard to see its analytics here.
+          Select an AMC and fund on the Dashboard to view its EDA here.
+        </div>
+      )}
+
+      {fund && loading && (
+        <div className="empty-prompt">Loading EDA…</div>
+      )}
+
+      {fund && !loading && eda && (
+        <>
+          <EDASection eda={eda} />
+          <div className="flow-continue">
+            <Link to="/prediction" className="btn primary">
+              Continue to Prediction →
+            </Link>
+          </div>
+        </>
+      )}
+
+      {fund && !loading && !eda && (
+        <div className="card" style={{ textAlign: "center" }}>
+          <button className="btn primary" onClick={loadEDA}>
+            Load EDA
+          </button>
         </div>
       )}
     </div>

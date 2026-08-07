@@ -3,9 +3,10 @@ import { NavLink } from "react-router-dom";
 
 const LINKS = [
   { to: "/", label: "Dashboard", icon: "🏠", end: true },
-  { to: "/prediction", label: "Prediction", icon: "📈" },
   { to: "/analytics", label: "Analytics", icon: "📊" },
+  { to: "/prediction", label: "Prediction", icon: "📈" },
   { to: "/model-comparison", label: "Model Comparison", icon: "📋" },
+  { to: "/sip-calculator", label: "SIP Calculator", icon: "💰" },
   { to: "/understanding-models", label: "Understanding Models", icon: "📚" },
   { to: "/about", label: "About Project", icon: "ℹ️" },
 ];

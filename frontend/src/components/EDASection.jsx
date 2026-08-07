@@ -14,7 +14,6 @@ export default function EDASection({ eda }) {
 
   const history = eda.navValues || [];
   const dates = eda.dates || [];
-  const algorithms = eda.algorithms || [];
 
   if (!history.length) return null;
 
@@ -36,28 +35,11 @@ export default function EDASection({ eda }) {
     0
   );
 
-  const modelColors = {
-    LINEAR: { from: "#34e89e", to: "#0f8a4a" },
-    RF: { from: "#ff7676", to: "#c0392b" },
-    DRIFT: { from: "#4fc3ff", to: "#1465a6" },
-  };
-
-  const getModelColor = (model) =>
-    modelColors[model] || { from: "#00eaff", to: "#0088a3" };
-
-  const rankBadge = (rank) => {
-    if (rank === 1) return { bg: "linear-gradient(135deg,#ffe27a,#c9a227)", fg: "#3a2a00" };
-    if (rank === 2) return { bg: "linear-gradient(135deg,#eceff1,#a3a9ad)", fg: "#2a2a2a" };
-    if (rank === 3) return { bg: "linear-gradient(135deg,#e3a978,#a0602f)", fg: "#2a1400" };
-    return { bg: "rgba(255,255,255,0.08)", fg: "#c9d8e6" };
-  };
-
-  const sortedAlgorithms = [...algorithms].sort((a, b) => a.rank - b.rank);
-
   return (
     <div style={container}>
 
       <h2 style={title}>Exploratory Data Analysis (EDA)</h2>
+
 
       {/* SUMMARY CARDS */}
       <div style={cardGrid}>
@@ -174,88 +156,6 @@ export default function EDASection({ eda }) {
         </div>
       )}
 
-      {/* ALGORITHM SECTION */}
-      {algorithms.length > 0 && (
-        <div style={algoCard}>
-          <h2 style={{ color: "#00eaff", marginBottom: 20 }}>
-            Algorithm Comparison & Ratings
-          </h2>
-
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Model</th>
-                <th style={thStyle}>Predicted</th>
-                <th style={thStyle}>Mean</th>
-                <th style={thStyle}>Accuracy</th>
-                <th style={thStyle}>Rating</th>
-                <th style={thStyle}>Rank</th>
-                <th style={thStyle}>Performance</th>
-              </tr>
-            </thead>
-            <tbody>
-              {algorithms.map((algo, index) => (
-                <tr key={index}>
-                  <td style={tdStyle}>{algo.model}</td>
-                  <td style={tdStyle}>{algo.predicted}</td>
-                  <td style={tdStyle}>{algo.mean}</td>
-                  <td style={tdStyle}>{algo.accuracy}%</td>
-                  <td style={tdStyle}>{algo.rating}</td>
-                  <td style={tdStyle}>{algo.rank}</td>
-                  <td style={tdStyle}>
-                    {algo.rank === 1 ? "Best Model" : "Good"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {/* ACCURACY LEADERBOARD */}
-          <div style={{ marginTop: 34 }}>
-            <div style={chartSubHeading}>Accuracy by Model</div>
-            <div style={leaderboardWrap}>
-              {sortedAlgorithms.map((algo, index) => {
-                const c = getModelColor(algo.model);
-                const badge = rankBadge(algo.rank);
-                return (
-                  <div key={index} style={leaderRow}>
-                    <div
-                      style={{
-                        ...rankCircle,
-                        background: badge.bg,
-                        color: badge.fg
-                      }}
-                    >
-                      {algo.rank}
-                    </div>
-                    <div style={leaderInfo}>
-                      <div style={leaderTopLine}>
-                        <span style={leaderModelName}>{algo.model}</span>
-                        <span style={leaderAccuracyValue}>{algo.accuracy}%</span>
-                      </div>
-                      <div style={barTrack}>
-                        <div
-                          style={{
-                            ...barFill,
-                            width: `${Math.min(100, Math.max(0, algo.accuracy))}%`,
-                            background: `linear-gradient(90deg, ${c.from}, ${c.to})`,
-                            boxShadow:
-                              algo.rank === 1 ? `0 0 14px ${c.from}99` : "none"
-                          }}
-                        />
-                      </div>
-                      <div style={leaderSubLine}>
-                        {algo.rating} &nbsp;·&nbsp; {algo.rank === 1 ? "Best Model" : "Good"}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }
@@ -323,88 +223,4 @@ const calcContainer = {
   padding: 20,
   background: "rgba(255,255,255,0.03)",
   borderRadius: 12,
-};
-
-const algoCard = {
-  marginTop: 40,
-  background: "rgba(15,23,42,0.8)",
-  padding: 35,
-  borderRadius: 18,
-  boxShadow: "0 0 40px rgba(0, 234, 255, 0.08)"
-};
-
-const chartSubHeading = {
-  color: "#9fe8ff",
-  fontWeight: 600,
-  fontSize: 15,
-  marginBottom: 16,
-};
-
-const leaderboardWrap = {
-  display: "flex",
-  flexDirection: "column",
-  gap: 18,
-};
-
-const leaderRow = {
-  display: "flex",
-  alignItems: "center",
-  gap: 16,
-};
-
-const rankCircle = {
-  width: 36,
-  height: 36,
-  borderRadius: "50%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  fontWeight: 800,
-  fontSize: 15,
-  flexShrink: 0,
-};
-
-const leaderInfo = {
-  flex: 1,
-  minWidth: 0,
-};
-
-const leaderTopLine = {
-  display: "flex",
-  justifyContent: "space-between",
-  marginBottom: 6,
-};
-
-const leaderModelName = {
-  color: "#e8f4fb",
-  fontWeight: 700,
-  fontSize: 14,
-  letterSpacing: 0.5,
-};
-
-const leaderAccuracyValue = {
-  color: "#fff",
-  fontWeight: 800,
-  fontSize: 14,
-};
-
-const barTrack = {
-  width: "100%",
-  height: 10,
-  borderRadius: 6,
-  background: "rgba(255,255,255,0.06)",
-  overflow: "hidden",
-};
-
-const barFill = {
-  height: "100%",
-  borderRadius: 6,
-  transition: "width 0.6s ease",
-};
-
-const leaderSubLine = {
-  marginTop: 6,
-  color: "#8aa0b6",
-  fontSize: 12,
-  fontWeight: 500,
 };

@@ -3,3 +3,32 @@
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+# Default ignored files
+/shelf/
+/workspace.xml
+
+# Editor-based HTTP Client requests
+/httpRequests/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Vite
+dist/
+build/
+
+# Java / Maven
+target/
+backend/target/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

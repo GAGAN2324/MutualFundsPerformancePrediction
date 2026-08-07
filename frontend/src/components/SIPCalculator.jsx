@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useEffect } from "react";
 
 export default function SIPCalculator({
-                                          selectedFund = null,
-                                          monthlySIP = 2000,
-                                          durations = [1, 3, 5],
-                                      }) {
+    selectedFund = null,
+    monthlySIP = 2000,
+    durations = [1, 3, 5],
+}) {
     const [sipAmount, setSipAmount] = useState(monthlySIP);
 
     const fundName =
@@ -83,85 +83,49 @@ export default function SIPCalculator({
     }, [monthlySIP]);
 
     return (
-        <div
-            style={{
-                borderRadius: 12,
-                padding: 18,
-                background: "linear-gradient(180deg,#07121a 0%, #061215 100%)",
-                color: "#e6fbff",
-                width: "100%",
-                boxShadow: "0 6px 24px rgba(0,180,255,0.06)",
-                marginTop: 10,
-            }}
-        >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <h3 style={{ color: "#00eaff" }}>💰 SIP Calculator</h3>
+        <div className="card sip-card">
+            <div className="sip-header">
+                <h3 className="sip-heading">💰 SIP Projection</h3>
 
-                <div style={{ textAlign: "right", color: "#9fe8ff" }}>
+                <div className="sip-meta">
                     <div><strong>Fund:</strong> {fundName}</div>
-                    <div>Expected Return: {pct(expectedAnnualReturn)}</div>
+                    <div>Expected Return (CAGR): {pct(expectedAnnualReturn)}</div>
                 </div>
             </div>
 
-            <div style={{ marginTop: 12 }}>
-                <label style={{ color: "#9fe8ff", fontSize: 13 }}>Monthly SIP</label>
+            <div className="sip-input-row">
+                <label className="sip-label">Monthly SIP Amount</label>
                 <input
                     type="number"
                     value={sipAmount}
                     onChange={(e) => setSipAmount(Number(e.target.value))}
-                    style={{
-                        marginTop: 6,
-                        padding: "8px 10px",
-                        borderRadius: 8,
-                        background: "#00121a",
-                        color: "#bffaff",
-                        width: 160,
-                        border: "1px solid rgba(255,255,255,0.04)",
-                    }}
+                    className="sip-input"
                 />
             </div>
 
-            <div
-                style={{
-                    marginTop: 18,
-                    display: "grid",
-                    gridTemplateColumns: "1.2fr 1fr 1fr 1fr",
-                    padding: "10px 12px",
-                    borderBottom: "1px solid rgba(255,255,255,0.08)",
-                    color: "#9fe8ff",
-                    fontWeight: 700,
-                    fontSize: 15,
-                }}
-            >
-                <div>Duration</div>
-                <div style={{ textAlign: "right" }}>Invested</div>
-                <div style={{ textAlign: "right" }}>Value</div>
-                <div style={{ textAlign: "right" }}>Return</div>
+            <div className="sip-table">
+                <div className="sip-row sip-row-head">
+                    <div>Duration</div>
+                    <div className="sip-cell-right">Invested</div>
+                    <div className="sip-cell-right">Est. Value</div>
+                    <div className="sip-cell-right">Annualized Return</div>
+                </div>
+
+                {results.map((row) => (
+                    <div key={row.years} className="sip-row">
+                        <div className="sip-duration">
+                            {row.years} Year{row.years > 1 ? "s" : ""}
+                        </div>
+                        <div className="sip-cell-right">₹{fmt(row.invested)}</div>
+                        <div className="sip-cell-right sip-value">₹{fmt(row.value)}</div>
+                        <div className="sip-cell-right">{pct(row.annualizedReturn)}</div>
+                    </div>
+                ))}
             </div>
 
-            {results.map((row) => (
-                <div
-                    key={row.years}
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "1.2fr 1fr 1fr 1fr",
-                        padding: "12px 12px",
-                        borderBottom: "1px solid rgba(255,255,255,0.04)",
-                    }}
-                >
-                    <div style={{ color: "#bffaff", fontWeight: 700 }}>
-                        {row.years} Year{row.years > 1 ? "s" : ""}
-                    </div>
-                    <div style={{ textAlign: "right" }}>{fmt(row.invested)}</div>
-                    <div style={{ textAlign: "right", fontWeight: 800 }}>
-                        {fmt(row.value)}
-                    </div>
-                    <div style={{ textAlign: "right" }}>{pct(row.annualizedReturn)}</div>
-                </div>
-            ))}
-
-            <div style={{ marginTop: 10, color: "#8fdcff", fontSize: 13 }}>
-                Note: Estimated based on selected fund's historical CAGR.
+            <div className="sip-note">
+                Estimated based on the selected fund's historical CAGR — actual
+                returns will vary with market performance.
             </div>
         </div>
     );
