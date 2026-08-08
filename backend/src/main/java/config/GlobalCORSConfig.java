@@ -11,8 +11,8 @@ public class GlobalCORSConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(
-                                "http://localhost:5173",
+                        .allowedOriginPatterns(
+                                "http://localhost:*",
                                 "https://victorious-manifestation-production.up.railway.app",
                                 "https://mutualfundsperformanceprediction.up.railway.app",
                                 "https://mutualfundsperformanceprediction-production.up.railway.app"

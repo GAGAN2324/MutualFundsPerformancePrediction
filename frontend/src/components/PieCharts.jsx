@@ -35,8 +35,19 @@ function CustomLegend({ items }) {
 }
 
 export default function PieCharts({ actual = [], predicted = [], modelData = [] }) {
-  const actualLast = actual[actual.length - 1] || 118;
-  const predictedLast = predicted[predicted.length - 1] || 122;
+  if (actual.length === 0 && predicted.length === 0 && modelData.length === 0) {
+    return (
+      <div style={styles.grid}>
+        <div className="premium-card" style={{ ...styles.card, ...styles.emptyState }}>
+          <div style={styles.emptyTitle}>No prediction data yet</div>
+          <div style={styles.emptySubtitle}>Run a prediction to see the NAV summary and model distribution here.</div>
+        </div>
+      </div>
+    );
+  }
+
+  const actualLast = actual[actual.length - 1] || 0;
+  const predictedLast = predicted[predicted.length - 1] || 0;
 
   const summaryData = [
     { name: "Actual NAV", value: actualLast },
@@ -54,9 +65,9 @@ export default function PieCharts({ actual = [], predicted = [], modelData = [] 
         { name: "RF", value: lastModelRow.RF || 0 },
       ]
     : [
-        { name: "DRIFT", value: 120 },
-        { name: "LINEAR", value: 115 },
-        { name: "RF", value: 118 },
+        { name: "DRIFT", value: 0 },
+        { name: "LINEAR", value: 0 },
+        { name: "RF", value: 0 },
       ];
 
   const topModel = [...comparisonData].sort((a, b) => b.value - a.value)[0];
@@ -162,6 +173,23 @@ const styles = {
   },
   card: {
     padding: "22px 22px 20px",
+  },
+  emptyState: {
+    textAlign: "center",
+    padding: "48px 26px",
+  },
+  emptyTitle: {
+    fontSize: 17,
+    fontWeight: 700,
+    color: "#f5f7fa",
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 13.5,
+    color: "var(--muted)",
+    maxWidth: 420,
+    margin: "0 auto",
+    lineHeight: 1.6,
   },
   headerRow: {
     marginBottom: 4,

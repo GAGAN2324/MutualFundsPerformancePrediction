@@ -18,9 +18,9 @@ const MODELS = [
   {
     icon: "🌲",
     name: "Random Forest",
-    desc: "An ensemble machine learning algorithm that combines multiple decision trees. It captures nonlinear relationships in NAV movement and usually provides the highest prediction accuracy.",
-    useCases: ["Volatile or nonlinear NAV movement", "When accuracy matters most"],
-    advantages: ["Captures nonlinear patterns", "Robust to noise/outliers", "Typically the most accurate of the three"],
+    desc: "An ensemble machine learning algorithm that combines multiple decision trees. It captures nonlinear relationships in NAV movement, and tends to outperform on choppier, less predictable funds -- though on smoothly trending funds, Drift or Linear Regression can score higher since Random Forest can't extrapolate past the range of values it was trained on.",
+    useCases: ["Volatile or nonlinear NAV movement", "Funds without a clean, consistent trend"],
+    advantages: ["Captures nonlinear patterns", "Robust to noise/outliers", "Often strongest on choppier, regime-shifting funds"],
   },
 ];
 

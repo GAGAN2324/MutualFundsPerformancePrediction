@@ -70,27 +70,22 @@ function KPIHeadline({ label, value, change, chart }) {
 }
 
 export default function ChartSection({ actual = [], predicted = [], dates = [], modelData = [] }) {
-  const chartData =
-    dates.length > 0
-      ? dates.map((d, i) => ({
-          date: d,
-          actual: actual[i] || 0,
-          predicted: predicted[i] || 0,
-        }))
-      : [
-          { date: "Jan", actual: 100, predicted: 102 },
-          { date: "Feb", actual: 105, predicted: 107 },
-          { date: "Mar", actual: 110, predicted: 112 },
-        ];
+  if (dates.length === 0 && modelData.length === 0) {
+    return (
+      <div style={styles.emptyState}>
+        <div style={styles.emptyTitle}>No prediction data yet</div>
+        <div style={styles.emptySubtitle}>Select a fund and run a prediction to see actual vs. predicted NAV and model comparisons here.</div>
+      </div>
+    );
+  }
 
-  const safeModelData =
-    modelData.length > 0
-      ? modelData
-      : [
-          { date: "Jan", DRIFT: 102, LINEAR: 101, RF: 103 },
-          { date: "Feb", DRIFT: 107, LINEAR: 106, RF: 108 },
-          { date: "Mar", DRIFT: 112, LINEAR: 110, RF: 113 },
-        ];
+  const chartData = dates.map((d, i) => ({
+    date: d,
+    actual: actual[i] || 0,
+    predicted: predicted[i] || 0,
+  }));
+
+  const safeModelData = modelData;
 
   /* Auto-scale the Y axis to the data instead of always starting at 0 —
      NAV values often sit in a narrow band (e.g. 200-230), and a 0-based
@@ -192,6 +187,26 @@ export default function ChartSection({ actual = [], predicted = [], dates = [], 
 }
 
 const styles = {
+  emptyState: {
+    background: "#05070a",
+    border: "1px solid rgba(255,255,255,0.06)",
+    borderRadius: 18,
+    padding: "48px 26px",
+    textAlign: "center",
+  },
+  emptyTitle: {
+    fontSize: 17,
+    fontWeight: 700,
+    color: "#f5f7fa",
+    marginBottom: 8,
+  },
+  emptySubtitle: {
+    fontSize: 13.5,
+    color: "var(--muted)",
+    maxWidth: 420,
+    margin: "0 auto",
+    lineHeight: 1.6,
+  },
   grid: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",

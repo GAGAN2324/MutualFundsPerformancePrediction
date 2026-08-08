@@ -48,20 +48,22 @@ export default function AIChat({ data, onClose }) {
         const growth = (((lastNav - firstNav) / firstNav) * 100).toFixed(2);
 
         const algoKeys = Object.keys(algorithms);
+        // Backend returns each algorithm's "accuracy" (higher is better),
+        // not "mape" -- compare on that field, keeping the highest.
         const bestModel = algoKeys.length > 0
             ? algoKeys.reduce((best, curr) => {
-                const bestMape = algorithms[best]?.mape;
-                const currMape = algorithms[curr]?.mape;
-                if (bestMape === undefined) return curr;
-                if (currMape === undefined) return best;
-                return currMape < bestMape ? curr : best;
+                const bestAcc = algorithms[best]?.accuracy;
+                const currAcc = algorithms[curr]?.accuracy;
+                if (bestAcc === undefined) return curr;
+                if (currAcc === undefined) return best;
+                return currAcc > bestAcc ? curr : best;
             }, algoKeys[0])
             : null;
 
         const responses = {
             trend: `The fund shows a ${growth > 0 ? "positive" : "negative"} trend of ${growth}%. Latest predicted NAV = ${lastNav}.`,
             best: bestModel
-                ? `${bestModel.toUpperCase()} is the best model due to lowest MAPE and stable pattern.`
+                ? `${bestModel.toUpperCase()} is the best model here, with the highest accuracy (${algorithms[bestModel]?.accuracy ?? "N/A"}%) on this fund.`
                 : "I don't have model comparison data to determine the best model.",
             model: bestModel
                 ? `${bestModel.toUpperCase()} fits the dataset best.`
