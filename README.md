@@ -1,5 +1,5 @@
 # Mutual Funds Performance Prediction
-
+**🔗 Live Demo:** [mutualfundsperformanceprediction.up.railway.app](https://mutualfundsperformanceprediction.up.railway.app/)
 A full-stack web application for tracking mutual fund NAV performance, calculating SIP (Systematic Investment Plan) returns, and forecasting future NAV using multiple machine learning models.
 
 ## Features
